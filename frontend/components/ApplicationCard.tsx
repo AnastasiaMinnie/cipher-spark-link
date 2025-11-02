@@ -143,15 +143,22 @@ export const ApplicationCard = ({
         <div className="pt-4 border-t border-border/50 space-y-2">
           {/* Decrypt Button */}
           {onDecrypt && (
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={handleDecrypt}
-              disabled={isDecrypting || showDecrypted}
-            >
-              <Lock className="w-4 h-4 mr-2" />
-              {isDecrypting ? "Decrypting via FHE..." : showDecrypted ? "Decrypted" : "Decrypt Data"}
-            </Button>
+            <div className="space-y-1">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={handleDecrypt}
+                disabled={isDecrypting || showDecrypted}
+              >
+                <Lock className="w-4 h-4 mr-2" />
+                {isDecrypting ? "Decrypting via FHE..." : showDecrypted ? "Decrypted" : "Decrypt Data"}
+              </Button>
+              {!showDecrypted && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Only applicant, approving verifier, or donor can decrypt
+                </p>
+              )}
+            </div>
           )}
 
           {/* Verify Buttons (for pending applications, but not for own applications) */}

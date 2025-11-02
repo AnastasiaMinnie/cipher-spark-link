@@ -496,8 +496,15 @@ export const useHelpCrypt = () => {
     } catch (error: any) {
       console.error("Failed to decrypt:", error);
       const errStr = String(error ?? "");
-      setMessage("Failed to decrypt: " + errStr);
-      addLog({ type: "error", title: "Decrypt failed", details: errStr });
+      
+      // Check for authorization error
+      if (errStr.includes("not authorized") || errStr.includes("is not authorized to user decrypt")) {
+        setMessage("Not authorized to decrypt. Only the applicant, approving verifier, or donor can decrypt this data.");
+        addLog({ type: "error", title: "Not authorized", details: "You don't have permission to decrypt this application's data" });
+      } else {
+        setMessage("Failed to decrypt: " + errStr);
+        addLog({ type: "error", title: "Decrypt failed", details: errStr });
+      }
     } finally {
       setIsDecrypting(false);
     }

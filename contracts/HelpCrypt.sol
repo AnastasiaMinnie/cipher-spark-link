@@ -145,11 +145,8 @@ contract HelpCrypt is SepoliaConfig {
         require(app.status == ApplicationStatus.Verified, "Application not verified");
         require(msg.value > 0, "Donation must be greater than 0");
 
+        // Update state before external call (Checks-Effects-Interactions pattern)
         app.donatedAmount += msg.value;
-
-        // Transfer funds to applicant
-        (bool success, ) = payable(app.applicant).call{value: msg.value}("");
-        require(success, "Transfer failed");
 
         // Mark as funded if target reached
         if (app.donatedAmount >= app.publicAmount) {
@@ -161,7 +158,12 @@ contract HelpCrypt is SepoliaConfig {
         FHE.allow(app.encryptedReasonHash, msg.sender);
         FHE.allow(app.encryptedAmount, msg.sender);
 
+        // Emit event before external call
         emit DonationMade(applicationId, msg.sender, msg.value);
+
+        // Transfer funds to applicant (external call last)
+        (bool success, ) = payable(app.applicant).call{value: msg.value}("");
+        require(success, "Transfer failed");
     }
 
     /// @notice Get application public info

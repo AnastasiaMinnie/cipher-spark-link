@@ -78,6 +78,8 @@ contract HelpCrypt is SepoliaConfig {
         bytes calldata amountProof,
         uint256 publicAmount
     ) external {
+        require(publicAmount > 0, "Amount must be greater than 0");
+        require(publicAmount <= 1000000, "Amount exceeds maximum limit");
         // Convert external encrypted values to internal encrypted values
         euint64 internalIdentityHash = FHE.fromExternal(encryptedIdentityHash, identityProof);
         euint64 internalReasonHash = FHE.fromExternal(encryptedReasonHash, reasonProof);

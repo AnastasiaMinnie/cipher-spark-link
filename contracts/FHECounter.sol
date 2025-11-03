@@ -16,6 +16,9 @@ contract FHECounter is SepoliaConfig {
     /// @notice Event emitted when the counter is decremented
     event CounterDecremented(address indexed user);
 
+    /// @notice Event emitted when the counter is reset
+    event CounterReset(address indexed user);
+
     /// @notice Returns the current count
     /// @return The current encrypted count
     function getCount() external view returns (euint32) {
@@ -52,5 +55,19 @@ contract FHECounter is SepoliaConfig {
         FHE.allow(_count, msg.sender);
 
         emit CounterDecremented(msg.sender);
+    }
+
+    /// @notice Resets the counter to zero
+    /// @param inputEuint32 the encrypted zero value
+    /// @param inputProof the input proof
+    function reset(externalEuint32 inputEuint32, bytes calldata inputProof) external {
+        euint32 encryptedZero = FHE.fromExternal(inputEuint32, inputProof);
+
+        _count = encryptedZero;
+
+        FHE.allowThis(_count);
+        FHE.allow(_count, msg.sender);
+
+        emit CounterReset(msg.sender);
     }
 }

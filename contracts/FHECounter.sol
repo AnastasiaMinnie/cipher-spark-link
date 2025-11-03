@@ -10,6 +10,12 @@ import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 contract FHECounter is SepoliaConfig {
     euint32 private _count;
 
+    /// @notice Event emitted when the counter is incremented
+    event CounterIncremented(address indexed user);
+
+    /// @notice Event emitted when the counter is decremented
+    event CounterDecremented(address indexed user);
+
     /// @notice Returns the current count
     /// @return The current encrypted count
     function getCount() external view returns (euint32) {
@@ -28,6 +34,8 @@ contract FHECounter is SepoliaConfig {
 
         FHE.allowThis(_count);
         FHE.allow(_count, msg.sender);
+
+        emit CounterIncremented(msg.sender);
     }
 
     /// @notice Decrements the counter by a specified encrypted value.
@@ -42,5 +50,7 @@ contract FHECounter is SepoliaConfig {
 
         FHE.allowThis(_count);
         FHE.allow(_count, msg.sender);
+
+        emit CounterDecremented(msg.sender);
     }
 }

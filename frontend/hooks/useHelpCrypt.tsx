@@ -215,17 +215,23 @@ export const useHelpCrypt = () => {
     } catch (error: any) {
       console.error("Failed to load applications:", error);
       const errStr = String(error ?? "");
+      const errMessage = error?.message ?? errStr;
       
-      // Check for common errors
-      if (errStr.includes("BAD_DATA") || errStr.includes('value="0x"')) {
-        setMessage("Contract not deployed. Please run 'npx hardhat deploy --network localhost' and restart.");
+      // Check for common errors with better categorization
+      if (errStr.includes("BAD_DATA") || errStr.includes('value="0x"') || errMessage.includes("BAD_DATA")) {
+        setMessage("Contract not deployed at this address. Please deploy the contract first.");
         setContractExists(false);
-      } else if (errStr.includes("Failed to fetch") || errStr.includes("code\": -32603")) {
-        setMessage("Cannot connect to Hardhat node. Please start it with 'npx hardhat node'.");
+        addLog({ type: "error", title: "Contract not found", details: "Deploy with: npx hardhat deploy --network localhost" });
+      } else if (errStr.includes("Failed to fetch") || errStr.includes("ECONNREFUSED") || errMessage.includes("network error")) {
+        setMessage("Network error: Cannot connect to blockchain node. Please check your connection.");
+        addLog({ type: "error", title: "Network error", details: "Start node with: npx hardhat node" });
+      } else if (errStr.includes("code\": -32603") || errMessage.includes("execution reverted")) {
+        setMessage("Transaction failed: The contract may not be responding correctly.");
+        addLog({ type: "error", title: "Contract error", details: errMessage });
       } else {
-        setMessage("Failed to load applications: " + errStr);
+        setMessage(`Error loading applications: ${errMessage.substring(0, 100)}`);
+        addLog({ type: "error", title: "Load failed", details: errMessage });
       }
-      addLog({ type: "error", title: "Load failed", details: errStr });
     } finally {
       setIsLoading(false);
     }
@@ -317,13 +323,21 @@ export const useHelpCrypt = () => {
     } catch (error: any) {
       console.error("Failed to submit application:", error);
       const errStr = String(error ?? "");
+      const errMessage = error?.message ?? errStr;
       
-      if (errStr.includes("Failed to fetch") || errStr.includes("code\": -32603")) {
-        setMessage("RPC error: Please check if Hardhat node is running and MetaMask is connected to the correct network.");
+      if (errStr.includes("user rejected") || errMessage.includes("User denied")) {
+        setMessage("Transaction cancelled by user.");
+        addLog({ type: "info", title: "Cancelled", details: "User rejected the transaction" });
+      } else if (errStr.includes("Failed to fetch") || errStr.includes("ECONNREFUSED")) {
+        setMessage("Network error: Please check if Hardhat node is running.");
+        addLog({ type: "error", title: "Network error", details: "Cannot connect to blockchain node" });
+      } else if (errStr.includes("insufficient funds") || errMessage.includes("insufficient")) {
+        setMessage("Insufficient funds: Please ensure you have enough ETH for gas fees.");
+        addLog({ type: "error", title: "Insufficient funds", details: errMessage });
       } else {
-        setMessage("Failed to submit: " + errStr);
+        setMessage(`Submit failed: ${errMessage.substring(0, 100)}`);
+        addLog({ type: "error", title: "Submit failed", details: errMessage });
       }
-      addLog({ type: "error", title: "Submit failed", details: errStr });
     } finally {
       setIsSubmitting(false);
     }

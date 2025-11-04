@@ -14,7 +14,8 @@ contract HelpCrypt is SepoliaConfig {
         Pending,
         Verified,
         Rejected,
-        Funded
+        Funded,
+        Cancelled
     }
 
     /// @notice Structure to store an aid application
@@ -59,6 +60,12 @@ contract HelpCrypt is SepoliaConfig {
         uint256 indexed applicationId,
         address indexed donor,
         uint256 amount
+    );
+
+    /// @notice Event emitted when an application is cancelled
+    event ApplicationCancelled(
+        uint256 indexed applicationId,
+        address indexed applicant
     );
 
     /// @notice Submit a new aid application with encrypted data
@@ -234,5 +241,19 @@ contract HelpCrypt is SepoliaConfig {
     function getVerifier(uint256 applicationId) external view returns (address) {
         require(applicationId < applicationCount, "Application does not exist");
         return applications[applicationId].verifier;
+    }
+
+    /// @notice Cancel a pending application
+    /// @param applicationId The ID of the application to cancel
+    /// @dev Only the applicant can cancel their own application and only if it's still pending
+    function cancelApplication(uint256 applicationId) external {
+        require(applicationId < applicationCount, "Application does not exist");
+        Application storage app = applications[applicationId];
+        require(app.applicant == msg.sender, "Only applicant can cancel");
+        require(app.status == ApplicationStatus.Pending, "Can only cancel pending applications");
+
+        app.status = ApplicationStatus.Cancelled;
+
+        emit ApplicationCancelled(applicationId, msg.sender);
     }
 }

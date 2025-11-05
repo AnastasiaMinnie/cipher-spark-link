@@ -44,7 +44,7 @@ contract HelpCrypt is SepoliaConfig {
     event ApplicationSubmitted(
         uint256 indexed applicationId,
         address indexed applicant,
-        uint256 publicAmount,
+        uint256 indexed publicAmount,
         uint256 timestamp
     );
 

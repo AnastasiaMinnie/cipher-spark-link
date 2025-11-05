@@ -25,10 +25,11 @@ interface ApplicationCardProps {
 }
 
 const statusConfig = {
-  0: { label: "Pending", icon: Clock, className: "text-muted-foreground" },
-  1: { label: "Verified", icon: CheckCircle, className: "text-primary" },
-  2: { label: "Rejected", icon: XCircle, className: "text-destructive" },
-  3: { label: "Funded", icon: CheckCircle, className: "text-green-400" },
+  0: { label: "Pending Review", icon: Clock, className: "text-yellow-500", bgClass: "bg-yellow-500/10" },
+  1: { label: "Verified", icon: CheckCircle, className: "text-primary", bgClass: "bg-primary/10" },
+  2: { label: "Rejected", icon: XCircle, className: "text-destructive", bgClass: "bg-destructive/10" },
+  3: { label: "Fully Funded", icon: CheckCircle, className: "text-green-400", bgClass: "bg-green-400/10" },
+  4: { label: "Cancelled", icon: XCircle, className: "text-gray-400", bgClass: "bg-gray-400/10" },
 };
 
 export const ApplicationCard = ({ 
@@ -95,9 +96,9 @@ export const ApplicationCard = ({
               <p className="text-xs text-muted-foreground">{formatTimestamp(timestamp)}</p>
             </div>
           </div>
-          <div className={`flex items-center gap-1 text-xs ${statusInfo.className}`}>
+          <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full ${statusInfo.className} ${statusInfo.bgClass}`}>
             <StatusIcon className="w-4 h-4" />
-            <span>{statusInfo.label}</span>
+            <span className="font-medium">{statusInfo.label}</span>
           </div>
         </div>
 
@@ -132,9 +133,17 @@ export const ApplicationCard = ({
               ${(showDecrypted && decryptedAmount ? decryptedAmount : publicAmount).toLocaleString()}
             </p>
             {donatedAmount > 0 && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Donated: ${donatedAmount.toLocaleString()}
-              </p>
+              <>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Raised: ${donatedAmount.toLocaleString()} ({Math.min(100, Math.round((donatedAmount / publicAmount) * 100))}%)
+                </p>
+                <div className="w-full bg-muted rounded-full h-2 mt-2">
+                  <div 
+                    className="bg-primary h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, (donatedAmount / publicAmount) * 100)}%` }}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

@@ -19,8 +19,9 @@ contract FHECounter is SepoliaConfig {
     /// @notice Event emitted when the counter is reset
     event CounterReset(address indexed user);
 
-    /// @notice Returns the current count
-    /// @return The current encrypted count
+    /// @notice Returns the current encrypted count value
+    /// @return The current encrypted count as euint32
+    /// @dev The returned value is encrypted and can only be decrypted by authorized users
     function getCount() external view returns (euint32) {
         return _count;
     }

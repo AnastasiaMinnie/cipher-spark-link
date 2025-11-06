@@ -8,6 +8,8 @@ import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 /// @author HelpCrypt Team
 /// @notice A privacy-preserving aid platform using FHE encryption
 /// @dev Beneficiaries submit encrypted applications, donors verify needs without exposing personal details
+/// @custom:security-contact security@helpcrypt.example
+/// @custom:version 1.0.0
 contract HelpCrypt is SepoliaConfig {
     /// @notice Application status enum
     enum ApplicationStatus {
@@ -148,6 +150,9 @@ contract HelpCrypt is SepoliaConfig {
 
     /// @notice Donate to a verified application
     /// @param applicationId The ID of the application to donate to
+    /// @dev Follows Checks-Effects-Interactions pattern to prevent reentrancy
+    /// @dev Donor gains access to encrypted application data after donation
+    /// @dev Emits DonationMade event
     function donate(uint256 applicationId) external payable {
         require(applicationId < applicationCount, "Application does not exist");
         Application storage app = applications[applicationId];

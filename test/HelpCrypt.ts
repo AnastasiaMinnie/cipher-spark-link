@@ -394,4 +394,81 @@ describe("HelpCrypt", function () {
     expect(applications[0]).to.eq(0);
     expect(applications[1]).to.eq(1);
   });
+
+  it("should not allow donation with zero amount", async function () {
+    // Submit and verify an application first
+    const identityHash = 10101010101010n;
+    const reasonHash = 20202020202020n;
+    const amount = 5000;
+
+    const encryptedIdentityHash = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add64(identityHash)
+      .encrypt();
+
+    const encryptedReasonHash = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add64(reasonHash)
+      .encrypt();
+
+    const encryptedAmount = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add32(amount)
+      .encrypt();
+
+    await helpCryptContract
+      .connect(signers.applicant)
+      .submitApplication(
+        encryptedIdentityHash.handles[0],
+        encryptedIdentityHash.inputProof,
+        encryptedReasonHash.handles[0],
+        encryptedReasonHash.inputProof,
+        encryptedAmount.handles[0],
+        encryptedAmount.inputProof,
+        amount
+      );
+
+    // Verify the application
+    await helpCryptContract.connect(signers.verifier).verifyApplication(0, true);
+
+    // Try to donate with zero value (should fail)
+    await expect(
+      helpCryptContract.connect(signers.donor).donate(0, { value: 0 })
+    ).to.be.revertedWith("Donation must be greater than 0");
+  });
+
+  it("should not submit application with zero amount", async function () {
+    const identityHash = 30303030303030n;
+    const reasonHash = 40404040404040n;
+
+    const encryptedIdentityHash = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add64(identityHash)
+      .encrypt();
+
+    const encryptedReasonHash = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add64(reasonHash)
+      .encrypt();
+
+    const encryptedAmount = await fhevm
+      .createEncryptedInput(helpCryptContractAddress, signers.applicant.address)
+      .add32(0)
+      .encrypt();
+
+    // Try to submit with zero amount (should fail)
+    await expect(
+      helpCryptContract
+        .connect(signers.applicant)
+        .submitApplication(
+          encryptedIdentityHash.handles[0],
+          encryptedIdentityHash.inputProof,
+          encryptedReasonHash.handles[0],
+          encryptedReasonHash.inputProof,
+          encryptedAmount.handles[0],
+          encryptedAmount.inputProof,
+          0
+        )
+    ).to.be.revertedWith("Amount must be greater than 0");
+  });
 });

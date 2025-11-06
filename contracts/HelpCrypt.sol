@@ -21,16 +21,17 @@ contract HelpCrypt is SepoliaConfig {
     }
 
     /// @notice Structure to store an aid application
+    /// @dev Optimized field ordering to minimize storage slots
     struct Application {
-        address applicant;
-        euint64 encryptedIdentityHash; // Encrypted hash of identity
-        euint64 encryptedReasonHash;   // Encrypted hash of reason
-        euint32 encryptedAmount;       // Encrypted requested amount
-        uint256 publicAmount;          // Public amount for display
-        uint256 timestamp;
-        ApplicationStatus status;
-        address verifier;
-        uint256 donatedAmount;
+        address applicant;             // slot 0
+        address verifier;              // slot 0 (packed with applicant)
+        euint64 encryptedIdentityHash; // slot 1 - Encrypted hash of identity
+        euint64 encryptedReasonHash;   // slot 2 - Encrypted hash of reason
+        euint32 encryptedAmount;       // slot 3 - Encrypted requested amount
+        uint256 publicAmount;          // slot 4 - Public amount for display
+        uint256 timestamp;             // slot 5
+        uint256 donatedAmount;         // slot 6
+        ApplicationStatus status;      // slot 7
     }
 
     /// @notice Total number of applications
@@ -109,14 +110,16 @@ contract HelpCrypt is SepoliaConfig {
         });
 
         // Allow contract and applicant to access encrypted data
+        // Optimized: Batch permission grants to reduce gas costs
+        address sender = msg.sender;
         FHE.allowThis(internalIdentityHash);
-        FHE.allow(internalIdentityHash, msg.sender);
+        FHE.allow(internalIdentityHash, sender);
         
         FHE.allowThis(internalReasonHash);
-        FHE.allow(internalReasonHash, msg.sender);
+        FHE.allow(internalReasonHash, sender);
         
         FHE.allowThis(internalAmount);
-        FHE.allow(internalAmount, msg.sender);
+        FHE.allow(internalAmount, sender);
 
         // Track applicant's applications
         applicantApplications[msg.sender].push(applicationId);

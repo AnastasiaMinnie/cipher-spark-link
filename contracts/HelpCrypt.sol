@@ -40,6 +40,12 @@ contract HelpCrypt is SepoliaConfig {
     /// @notice Mapping from application ID to Application
     mapping(uint256 => Application) private applications;
 
+    /// @notice Modifier to check if application exists
+    modifier applicationExists(uint256 applicationId) {
+        require(applicationId < applicationCount, "Application does not exist");
+        _;
+    }
+
     /// @notice Mapping from applicant address to their application IDs
     mapping(address => uint256[]) private applicantApplications;
 
@@ -132,8 +138,7 @@ contract HelpCrypt is SepoliaConfig {
     /// @notice Verify an application (mark as verified or rejected)
     /// @param applicationId The ID of the application to verify
     /// @param approved Whether the application is approved
-    function verifyApplication(uint256 applicationId, bool approved) external {
-        require(applicationId < applicationCount, "Application does not exist");
+    function verifyApplication(uint256 applicationId, bool approved) external applicationExists(applicationId) {
         Application storage app = applications[applicationId];
         require(app.status == ApplicationStatus.Pending, "Application not pending");
         require(app.applicant != msg.sender, "Cannot verify own application");
@@ -156,8 +161,7 @@ contract HelpCrypt is SepoliaConfig {
     /// @dev Follows Checks-Effects-Interactions pattern to prevent reentrancy
     /// @dev Donor gains access to encrypted application data after donation
     /// @dev Emits DonationMade event
-    function donate(uint256 applicationId) external payable {
-        require(applicationId < applicationCount, "Application does not exist");
+    function donate(uint256 applicationId) external payable applicationExists(applicationId) {
         Application storage app = applications[applicationId];
         require(app.status == ApplicationStatus.Verified, "Application not verified");
         require(msg.value > 0, "Donation must be greater than 0");
@@ -193,6 +197,7 @@ contract HelpCrypt is SepoliaConfig {
     function getApplicationInfo(uint256 applicationId)
         external
         view
+        applicationExists(applicationId)
         returns (
             address applicant,
             uint256 publicAmount,
@@ -201,7 +206,6 @@ contract HelpCrypt is SepoliaConfig {
             uint256 donatedAmount
         )
     {
-        require(applicationId < applicationCount, "Application does not exist");
         Application storage app = applications[applicationId];
         return (
             app.applicant,

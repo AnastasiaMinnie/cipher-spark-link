@@ -219,24 +219,21 @@ contract HelpCrypt is SepoliaConfig {
     /// @notice Get encrypted identity hash for an application (only accessible by authorized users)
     /// @param applicationId The ID of the application
     /// @return The encrypted identity hash
-    function getEncryptedIdentityHash(uint256 applicationId) external view returns (euint64) {
-        require(applicationId < applicationCount, "Application does not exist");
+    function getEncryptedIdentityHash(uint256 applicationId) external view applicationExists(applicationId) returns (euint64) {
         return applications[applicationId].encryptedIdentityHash;
     }
 
     /// @notice Get encrypted reason hash for an application (only accessible by authorized users)
     /// @param applicationId The ID of the application
     /// @return The encrypted reason hash
-    function getEncryptedReasonHash(uint256 applicationId) external view returns (euint64) {
-        require(applicationId < applicationCount, "Application does not exist");
+    function getEncryptedReasonHash(uint256 applicationId) external view applicationExists(applicationId) returns (euint64) {
         return applications[applicationId].encryptedReasonHash;
     }
 
     /// @notice Get encrypted amount for an application (only accessible by authorized users)
     /// @param applicationId The ID of the application
     /// @return The encrypted amount
-    function getEncryptedAmount(uint256 applicationId) external view returns (euint32) {
-        require(applicationId < applicationCount, "Application does not exist");
+    function getEncryptedAmount(uint256 applicationId) external view applicationExists(applicationId) returns (euint32) {
         return applications[applicationId].encryptedAmount;
     }
 
@@ -250,16 +247,14 @@ contract HelpCrypt is SepoliaConfig {
     /// @notice Get the verifier of an application
     /// @param applicationId The ID of the application
     /// @return The verifier address
-    function getVerifier(uint256 applicationId) external view returns (address) {
-        require(applicationId < applicationCount, "Application does not exist");
+    function getVerifier(uint256 applicationId) external view applicationExists(applicationId) returns (address) {
         return applications[applicationId].verifier;
     }
 
     /// @notice Cancel a pending application
     /// @param applicationId The ID of the application to cancel
     /// @dev Only the applicant can cancel their own application and only if it's still pending
-    function cancelApplication(uint256 applicationId) external {
-        require(applicationId < applicationCount, "Application does not exist");
+    function cancelApplication(uint256 applicationId) external applicationExists(applicationId) {
         Application storage app = applications[applicationId];
         require(app.applicant == msg.sender, "Only applicant can cancel");
         require(app.status == ApplicationStatus.Pending, "Can only cancel pending applications");

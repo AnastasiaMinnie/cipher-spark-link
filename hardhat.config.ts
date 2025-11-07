@@ -117,13 +117,15 @@ const config: HardhatUserConfig = {
         // https://github.com/paulrberg/hardhat-template/issues/31
         bytecodeHash: "none",
       },
-      // Disable the optimizer when debugging
+      // Optimizer configuration for production deployment
       // https://hardhat.org/hardhat-network/#solidity-optimizer-support
       optimizer: {
         enabled: true,
-        runs: 800,
+        runs: 800, // Optimized for frequent contract calls
       },
       evmVersion: "cancun",
+      // Additional compiler options for better code generation
+      viaIR: false,
     },
   },
   typechain: {

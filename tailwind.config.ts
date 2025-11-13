@@ -47,9 +47,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        crypto: {
-          glow: "hsl(var(--crypto-glow))",
-          pulse: "hsl(var(--crypto-pulse))",
+        warm: {
+          glow: "hsl(var(--warm-glow))",
+          pulse: "hsl(var(--warm-pulse))",
         },
       },
       borderRadius: {

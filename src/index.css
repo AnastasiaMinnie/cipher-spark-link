@@ -8,45 +8,45 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 25% 8%;
-    --foreground: 180 100% 95%;
+    --background: 25 30% 8%;
+    --foreground: 35 100% 95%;
 
-    --card: 220 23% 11%;
-    --card-foreground: 180 100% 95%;
+    --card: 25 28% 11%;
+    --card-foreground: 35 100% 95%;
 
-    --popover: 220 23% 11%;
-    --popover-foreground: 180 100% 95%;
+    --popover: 25 28% 11%;
+    --popover-foreground: 35 100% 95%;
 
-    --primary: 180 85% 55%;
-    --primary-foreground: 220 25% 8%;
+    --primary: 30 85% 55%;
+    --primary-foreground: 25 30% 8%;
 
-    --secondary: 200 70% 45%;
-    --secondary-foreground: 180 100% 95%;
+    --secondary: 20 75% 50%;
+    --secondary-foreground: 35 100% 95%;
 
-    --muted: 220 20% 18%;
-    --muted-foreground: 180 20% 70%;
+    --muted: 25 20% 18%;
+    --muted-foreground: 35 20% 70%;
 
-    --accent: 280 65% 60%;
-    --accent-foreground: 180 100% 95%;
+    --accent: 10 80% 60%;
+    --accent-foreground: 35 100% 95%;
 
     --destructive: 0 65% 55%;
-    --destructive-foreground: 180 100% 95%;
+    --destructive-foreground: 35 100% 95%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 20%;
-    --ring: 180 85% 55%;
+    --border: 25 20% 20%;
+    --input: 25 20% 20%;
+    --ring: 30 85% 55%;
 
     --radius: 0.75rem;
 
-    /* Custom crypto theme tokens */
-    --crypto-glow: 180 85% 55%;
-    --crypto-pulse: 280 65% 60%;
-    --gradient-start: 200 70% 45%;
-    --gradient-end: 280 65% 60%;
+    /* Warm compassion theme tokens */
+    --warm-glow: 30 85% 55%;
+    --warm-pulse: 10 80% 60%;
+    --gradient-start: 25 80% 50%;
+    --gradient-end: 40 75% 55%;
     
     /* Effects */
-    --shadow-glow: 0 0 30px hsl(var(--crypto-glow) / 0.3);
-    --shadow-pulse: 0 0 20px hsl(var(--crypto-pulse) / 0.4);
+    --shadow-glow: 0 0 30px hsl(var(--warm-glow) / 0.4);
+    --shadow-pulse: 0 0 20px hsl(var(--warm-pulse) / 0.5);
   }
 }
 
@@ -61,29 +61,29 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
-  .crypto-glow {
+  .warm-glow {
     box-shadow: var(--shadow-glow);
   }
   
-  .crypto-pulse {
+  .warm-pulse {
     animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   
-  .gradient-crypto {
+  .gradient-warm {
     background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
   }
   
-  .gradient-bubble {
-    background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent) / 0.2));
+  .gradient-card {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.15));
     backdrop-filter: blur(10px);
   }
 
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--crypto-glow) / 0.4);
+      box-shadow: 0 0 20px hsl(var(--warm-glow) / 0.5);
     }
     50% {
-      box-shadow: 0 0 40px hsl(var(--crypto-glow) / 0.8);
+      box-shadow: 0 0 40px hsl(var(--warm-glow) / 0.9);
     }
   }
 }

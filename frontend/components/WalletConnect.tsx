@@ -2,24 +2,28 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Card } from "@/components/ui/card";
-import { Wallet, Shield, Lock } from "lucide-react";
+import Image from "next/image";
 
 export const WalletConnect = () => {
   return (
-    <Card className="p-8 bg-card/50 backdrop-blur-sm border-primary/20">
+    <Card className="p-8 glass-card rounded-3xl border-primary/20">
       <div className="flex flex-col items-center gap-6 text-center">
         <div className="relative">
-          <Wallet className="w-16 h-16 text-primary warm-pulse" />
-          <Shield className="absolute -top-2 -right-2 w-6 h-6 text-accent" />
+          <div className="text-6xl emoji-bounce">👛</div>
+          <span className="absolute -top-1 -right-1 text-2xl animate-sparkle">✨</span>
         </div>
         
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-foreground">
+        <div className="space-y-3">
+          <h3 className="text-2xl font-semibold text-foreground flex items-center justify-center gap-2">
+            <span>🔗</span>
             Connect Your Wallet
+            <span>🔗</span>
           </h3>
           <p className="text-sm text-muted-foreground max-w-md">
+            <span className="mr-1">🔐</span>
             Wallet required to submit applications, donate, or verify beneficiaries. 
             All data remains encrypted with FHE technology.
+            <span className="ml-1">💜</span>
           </p>
         </div>
         
@@ -52,10 +56,11 @@ export const WalletConnect = () => {
                     return (
                       <button
                         onClick={openConnectModal}
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 warm-glow transition-all duration-300 h-11 rounded-md px-8 inline-flex items-center justify-center gap-2 font-medium"
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 warm-glow transition-all duration-300 h-12 rounded-2xl px-8 inline-flex items-center justify-center gap-2 font-medium hover:scale-105"
                       >
-                        <Wallet className="w-5 h-5" />
+                        <span className="text-lg">👛</span>
                         Connect Wallet
+                        <span className="text-lg">✨</span>
                       </button>
                     );
                   }
@@ -64,8 +69,9 @@ export const WalletConnect = () => {
                     return (
                       <button 
                         onClick={openChainModal}
-                        className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90 h-11 rounded-md px-8 font-medium"
+                        className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90 h-12 rounded-2xl px-8 font-medium"
                       >
+                        <span className="mr-2">⚠️</span>
                         Wrong network
                       </button>
                     );
@@ -75,7 +81,7 @@ export const WalletConnect = () => {
                     <div className="flex gap-3 w-full">
                       <button
                         onClick={openChainModal}
-                        className="flex items-center gap-2 bg-card border border-border hover:bg-muted/50 h-11 rounded-md px-4 transition-colors"
+                        className="flex items-center gap-2 glass-card border border-border hover:bg-muted/50 h-12 rounded-2xl px-4 transition-all hover:scale-105"
                       >
                         {chain.hasIcon && (
                           <div
@@ -88,10 +94,11 @@ export const WalletConnect = () => {
                             }}
                           >
                             {chain.iconUrl && (
-                              <img
+                              <Image
                                 alt={chain.name ?? 'Chain icon'}
                                 src={chain.iconUrl}
-                                style={{ width: 24, height: 24 }}
+                                width={24}
+                                height={24}
                               />
                             )}
                           </div>
@@ -101,8 +108,9 @@ export const WalletConnect = () => {
 
                       <button
                         onClick={openAccountModal}
-                        className="flex-1 bg-primary/10 border border-primary/30 hover:bg-primary/20 h-11 rounded-md px-4 font-medium text-sm transition-colors"
+                        className="flex-1 bg-primary/10 border border-primary/30 hover:bg-primary/20 h-12 rounded-2xl px-4 font-medium text-sm transition-all hover:scale-105"
                       >
+                        <span className="mr-1">🎭</span>
                         {account.displayName}
                       </button>
                     </div>
@@ -113,9 +121,10 @@ export const WalletConnect = () => {
           }}
         </ConnectButton.Custom>
         
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Lock className="w-3 h-3" />
+        <div className="flex items-center gap-2 text-xs text-muted-foreground glass-card px-4 py-2 rounded-full">
+          <span>🔒</span>
           <span>Encrypted data storage with FHE</span>
+          <span>🛡️</span>
         </div>
       </div>
     </Card>

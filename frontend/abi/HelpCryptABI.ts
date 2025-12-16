@@ -19,9 +19,28 @@ export const HelpCryptABI = {
           "internalType": "address",
           "name": "applicant",
           "type": "address"
+        }
+      ],
+      "name": "ApplicationCancelled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "applicationId",
+          "type": "uint256"
         },
         {
-          "indexed": false,
+          "indexed": true,
+          "internalType": "address",
+          "name": "applicant",
+          "type": "address"
+        },
+        {
+          "indexed": true,
           "internalType": "uint256",
           "name": "publicAmount",
           "type": "uint256"
@@ -97,6 +116,19 @@ export const HelpCryptABI = {
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "applicationId",
+          "type": "uint256"
+        }
+      ],
+      "name": "cancelApplication",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

@@ -4,7 +4,7 @@ A privacy-preserving aid platform using Fully Homomorphic Encryption (FHE) techn
 
 ## 🎥 Demo
 
-**Live Demo:** [https://cipher-spark-link.vercel.app/](https://cipher-spark-link.vercel.app/)
+**Live Demo:** [https://cipher-spark-link.vercel.app/](https://cipher-spark-link-eta.vercel.app/)
 
 **Video Demonstration:**
 

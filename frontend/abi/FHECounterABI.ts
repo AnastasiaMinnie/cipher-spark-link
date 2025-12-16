@@ -6,6 +6,45 @@
 export const FHECounterABI = {
   "abi": [
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "CounterDecremented",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "CounterIncremented",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "CounterReset",
+      "type": "event"
+    },
+    {
       "inputs": [
         {
           "internalType": "externalEuint32",
@@ -65,6 +104,24 @@ export const FHECounterABI = {
         }
       ],
       "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "externalEuint32",
+          "name": "inputEuint32",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "inputProof",
+          "type": "bytes"
+        }
+      ],
+      "name": "reset",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ]
